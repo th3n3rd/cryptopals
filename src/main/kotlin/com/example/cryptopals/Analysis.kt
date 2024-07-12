@@ -16,6 +16,22 @@ object Analysis {
                 .key
         }
 
+        fun detect(encrypted: List<Bytes>): Bytes {
+            return encrypted
+                .asSequence()
+                .map { it.xor(deriveKey(it)) }
+                .map {
+                    ScoredPlaintext(
+                        plaintext = it,
+                        score = Score.ByLetterFrequencies(it)
+                    )
+                }
+                .sortedBy { it.score }
+                .map { it.plaintext }
+                .first()
+        }
+
+        data class ScoredPlaintext(val plaintext: Bytes, val score: Double)
         data class ScoredKey(val key: Byte, val score: Double)
     }
 }

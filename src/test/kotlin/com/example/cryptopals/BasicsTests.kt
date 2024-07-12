@@ -4,6 +4,8 @@ import com.example.cryptopals.Analysis.SingleByteXor
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
+import java.nio.file.Files
+import java.nio.file.Path
 
 class BasicsTests {
 
@@ -38,5 +40,18 @@ class BasicsTests {
         input.xor(key) shouldBe expected
     }
 
-}
+    @Test
+    fun `detect single-character xor`() {
+        val inputs = Files.readString(Path.of("src/test/resources/detect-single-character-xor.txt"))
+            .split("\n")
+            .map { Bytes.fromHex(it) }
+        val expected = Bytes.of("Now that the party is jumping\n")
 
+        val actual = SingleByteXor.detect(inputs)
+
+        actual shouldBe expected
+    }
+
+        result shouldBe expected
+    }
+}

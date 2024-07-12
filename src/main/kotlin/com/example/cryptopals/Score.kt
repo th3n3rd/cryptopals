@@ -12,7 +12,21 @@ object Score {
         )
 
         operator fun invoke(plaintext: Bytes): Double {
-            return chiSquareTest(letterFrequencies(plaintext))
+            return chiSquareTest(letterFrequencies(plaintext)) + penalties(plaintext)
+        }
+
+        private fun penalties(plaintext: Bytes): Double {
+            val nonPrintableCharacter = plaintext
+                .toString()
+                .count { !it.isPrintable() && !it.isNewLine() }
+                .toDouble() * 20
+
+            val printableButSymbol = plaintext
+                .toString()
+                .count { it.isPrintableSymbol() }
+                .toDouble() * 10
+
+            return nonPrintableCharacter + printableButSymbol
         }
 
         private fun letterFrequencies(plaintext: Bytes): Map<Char, Double> {
@@ -36,3 +50,7 @@ object Score {
         }
     }
 }
+
+private fun Char.isPrintable() = code in 32..126
+private fun Char.isNewLine() = code == 10 || code == 13
+private fun Char.isPrintableSymbol() = isPrintable() && !isLetterOrDigit() && !isWhitespace()
