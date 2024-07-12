@@ -31,11 +31,11 @@ class BasicsTests {
     @Test
     fun `single-byte xor cipher`() {
         val input = Bytes.fromHex("1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736")
-        val expected = "Cooking MC's like a pound of bacon"
+        val expected = Bytes.of("Cooking MC's like a pound of bacon")
 
-        val actual = SingleByteXor.decrypt(input)
+        val key = SingleByteXor.deriveKey(input)
 
-        actual shouldBe expected
+        input.xor(key) shouldBe expected
     }
 
 }

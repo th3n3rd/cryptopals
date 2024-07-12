@@ -2,14 +2,20 @@ package com.example.cryptopals
 
 object Analysis {
     object SingleByteXor {
-        fun decrypt(encrypted: Bytes): String {
+        fun deriveKey(encrypted: Bytes): Byte {
             return (0..255).asSequence()
-                .map { encrypted.xor(it.toByte()) }
-                .map { it.toString() }
-                .map { Score.ByLetterFrequencies(it) }
+                .map { it.toByte() }
+                .map {
+                    ScoredKey(
+                        key = it,
+                        score = Score.ByLetterFrequencies(encrypted.xor(it))
+                    )
+                }
                 .sortedBy { it.score }
                 .first()
-                .candidate
+                .key
         }
+
+        data class ScoredKey(val key: Byte, val score: Double)
     }
 }

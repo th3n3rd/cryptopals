@@ -11,15 +11,13 @@ object Score {
             'z' to 0.074
         )
 
-        operator fun invoke(candidate: String): ScoredCandidate {
-            return ScoredCandidate(
-                candidate = candidate,
-                score = chiSquareTest(letterFrequencies(candidate))
-            )
+        operator fun invoke(plaintext: Bytes): Double {
+            return chiSquareTest(letterFrequencies(plaintext))
         }
 
-        private fun letterFrequencies(candidate: String): Map<Char, Double> {
-            val letters = candidate.replace("[^a-zA-Z]+".toRegex(), "")
+        private fun letterFrequencies(plaintext: Bytes): Map<Char, Double> {
+            val content = plaintext.toString()
+            val letters = content.replace("[^a-zA-Z]+".toRegex(), "")
             return letters
                 .groupingBy { it.lowercaseChar() }
                 .eachCount()
@@ -38,5 +36,3 @@ object Score {
         }
     }
 }
-
-data class ScoredCandidate(val score: Double, val candidate: String)
