@@ -24,10 +24,25 @@ data class HexEncoded(val bytes: ByteArray) {
 
     fun xor(other: HexEncoded): HexEncoded {
         return HexEncoded(
-            bytes.zip(other.bytes)
+            bytes
+                .zip(other.bytes)
                 .map { (first, second) -> first.xor(second) }
                 .toByteArray()
         )
+    }
+
+    fun xor(char: Char): HexEncoded {
+        return HexEncoded(
+            bytes
+                .map { it xor char.code.toByte() }
+                .toByteArray()
+        )
+    }
+
+    fun decode(): String {
+        return bytes
+            .map { it.toInt().toChar() }
+            .joinToString("")
     }
 
     companion object {

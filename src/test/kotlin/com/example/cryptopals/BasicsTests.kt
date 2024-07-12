@@ -1,5 +1,6 @@
 package com.example.cryptopals
 
+import com.example.cryptopals.Analysis.SingleByteXor
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
@@ -30,5 +31,16 @@ class BasicsTests {
 
         actual shouldBe expected
     }
+
+    @Test
+    fun `single-byte xor cipher`() {
+        val input = HexEncoded.of("1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736")
+        val expected = "Cooking MC's like a pound of bacon"
+
+        val actual = SingleByteXor.decrypt(input)
+
+        actual shouldBe expected
+    }
+
 }
 
