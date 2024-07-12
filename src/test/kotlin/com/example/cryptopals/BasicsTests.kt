@@ -1,6 +1,7 @@
 package com.example.cryptopals
 
 import io.kotest.matchers.equals.shouldBeEqual
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
 class BasicsTests {
@@ -19,5 +20,15 @@ class BasicsTests {
         actual shouldBeEqual expected
     }
 
+    @Test
+    fun `fixed xor`() {
+        val first = HexEncoded.of("1c0111001f010100061a024b53535009181c")
+        val second = HexEncoded.of("686974207468652062756c6c277320657965")
+        val expected = HexEncoded.of("746865206b696420646f6e277420706c6179")
+
+        val actual = first.xor(second)
+
+        actual shouldBe expected
+    }
 }
 

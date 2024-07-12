@@ -1,6 +1,7 @@
 package com.example.cryptopals
 
 import java.util.*
+import kotlin.experimental.xor
 
 data class HexEncoded(val bytes: ByteArray) {
 
@@ -19,6 +20,14 @@ data class HexEncoded(val bytes: ByteArray) {
 
     override fun hashCode(): Int {
         return bytes.contentHashCode()
+    }
+
+    fun xor(other: HexEncoded): HexEncoded {
+        return HexEncoded(
+            bytes.zip(other.bytes)
+                .map { (first, second) -> first.xor(second) }
+                .toByteArray()
+        )
     }
 
     companion object {
