@@ -5,12 +5,15 @@ import kotlin.experimental.xor
 
 data class Bytes(val content: ByteArray) {
 
-    fun toBase64() = Bytes(Base64.getEncoder().encode(content))
-
     fun xor(other: Bytes): Bytes {
+        val maxLength = maxOf(content.size, other.content.size)
+
+        val extended = extendUpTo(maxLength)
+        val otherExtended = other.extendUpTo(maxLength)
+
         return Bytes(
-            content
-                .zip(other.content)
+            extended.content
+                .zip(otherExtended.content)
                 .map { (first, second) -> first.xor(second) }
                 .toByteArray()
         )
@@ -25,6 +28,25 @@ data class Bytes(val content: ByteArray) {
             )
         )
     }
+
+    fun extendUpTo(length: Int): Bytes {
+        return Bytes(
+            ByteArray(length) {
+                content[it % content.size]
+            }
+        )
+    }
+
+    fun toBase64() = Bytes(
+        Base64.getEncoder().encode(content)
+    )
+
+    fun toHex() = Bytes(
+        content.joinToString("")
+            .chunked(2)
+            .map { it.toByte() }
+            .toByteArray()
+    )
 
     override fun toString(): String {
         return content
@@ -51,6 +73,10 @@ data class Bytes(val content: ByteArray) {
                 .chunked(2)
                 .map { it.toInt(16).toByte() }
                 .toByteArray()
+        )
+
+        fun fromHexMultiline(encoded: String) = fromHex(
+            encoded.replace("\n", "")
         )
 
         fun of(content: String) = Bytes(content.toByteArray())

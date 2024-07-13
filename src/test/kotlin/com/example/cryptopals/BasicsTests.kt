@@ -1,11 +1,13 @@
 package com.example.cryptopals
 
+import com.example.cryptopals.Analysis.RepeatingKeyXor
 import com.example.cryptopals.Analysis.SingleByteXor
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.math.exp
 
 class BasicsTests {
 
@@ -52,6 +54,20 @@ class BasicsTests {
         actual shouldBe expected
     }
 
-        result shouldBe expected
+    @Test
+    fun `implement repeating-key xor`() {
+        val plaintext = Bytes.of("""
+            Burning 'em, if you ain't quick and nimble
+            I go crazy when I hear a cymbal
+        """.trimIndent())
+        val key = Bytes.of("ICE")
+        val expected = Bytes.fromHexMultiline("""
+            0b3637272a2b2e63622c2e69692a23693a2a3c6324202d623d63343c2a26226324272765272
+            a282b2f20430a652e2c652a3124333a653e2b2027630c692b20283165286326302e27282f
+        """.trimIndent())
+
+        val actual = RepeatingKeyXor.encrypt(plaintext, key)
+
+        actual shouldBeEqual expected
     }
 }

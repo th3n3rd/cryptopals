@@ -34,4 +34,10 @@ object Analysis {
         data class ScoredPlaintext(val plaintext: Bytes, val score: Double)
         data class ScoredKey(val key: Byte, val score: Double)
     }
+
+    object RepeatingKeyXor {
+        fun encrypt(plaintext: Bytes, key: Bytes): Bytes {
+            return plaintext.xor(key)
+        }
+    }
 }
