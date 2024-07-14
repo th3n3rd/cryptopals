@@ -88,4 +88,19 @@ class BasicsTests {
 
         actual shouldBeEqual expected
     }
+
+    @Test
+    fun `aes in ecb mode`() {
+        val encrypted = Bytes.fromBase64Multiline(
+            Files.readString(Path.of("src/test/resources/aes-in-ecb-mode.txt"))
+        )
+        val expected = Bytes.of(
+            Files.readString(Path.of("src/test/resources/aes-in-ecb-mode-plaintext.txt"))
+        )
+        val key = Bytes.of("YELLOW SUBMARINE")
+
+        val actual = Analysis.Aes.decrypt(encrypted, key)
+
+        actual shouldBeEqual expected
+    }
 }

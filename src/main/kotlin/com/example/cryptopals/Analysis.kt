@@ -1,5 +1,8 @@
 package com.example.cryptopals
 
+import javax.crypto.Cipher
+import javax.crypto.spec.SecretKeySpec
+
 object Analysis {
     object SingleByteXor {
         fun deriveKey(encrypted: Bytes): Byte {
@@ -95,6 +98,13 @@ object Analysis {
         }
     }
 
+    object Aes {
+        fun decrypt(encrypted: Bytes, key: Bytes): Bytes {
+            val cipher = Cipher.getInstance("AES/ECB/PKCS5Padding")
+            cipher.init(Cipher.DECRYPT_MODE, SecretKeySpec(key.content, "AES"))
+            return Bytes(cipher.doFinal(encrypted.content))
+        }
+    }
 }
 
 data class ScoredByteKey(val key: Byte, val score: Double)
