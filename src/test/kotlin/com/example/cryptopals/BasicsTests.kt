@@ -7,13 +7,13 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
-import kotlin.math.exp
 
 class BasicsTests {
 
     @Test
     fun `convert hex to base64`() {
-        val input = Bytes.fromHex("49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d")
+        val input =
+            Bytes.fromHex("49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d")
         val expected = Bytes.of("SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t")
 
         val actual = input.toBase64()
@@ -56,17 +56,35 @@ class BasicsTests {
 
     @Test
     fun `implement repeating-key xor`() {
-        val plaintext = Bytes.of("""
+        val plaintext = Bytes.of(
+            """
             Burning 'em, if you ain't quick and nimble
             I go crazy when I hear a cymbal
-        """.trimIndent())
+        """.trimIndent()
+        )
         val key = Bytes.of("ICE")
-        val expected = Bytes.fromHexMultiline("""
+        val expected = Bytes.fromHexMultiline(
+            """
             0b3637272a2b2e63622c2e69692a23693a2a3c6324202d623d63343c2a26226324272765272
             a282b2f20430a652e2c652a3124333a653e2b2027630c692b20283165286326302e27282f
-        """.trimIndent())
+        """.trimIndent()
+        )
 
         val actual = RepeatingKeyXor.encrypt(plaintext, key)
+
+        actual shouldBeEqual expected
+    }
+
+    @Test
+    fun `break repeating-key xor`() {
+        val encrypted = Bytes.fromBase64Multiline(
+            Files.readString(Path.of("src/test/resources/break-repeating-key-xor.txt"))
+        )
+        val expected = Bytes.of(
+            Files.readString(Path.of("src/test/resources/break-repeating-key-xor-plaintext.txt"))
+        )
+
+        val actual = RepeatingKeyXor.decrypt(encrypted)
 
         actual shouldBeEqual expected
     }

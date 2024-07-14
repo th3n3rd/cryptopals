@@ -14,4 +14,13 @@ class BytesTests {
 
         actual shouldBeEqual expected
     }
+
+    @Test
+    fun `compute the distance to another set of bytes, ie Hamming distance`() {
+        val expected = 37
+
+        val actual = Bytes.of("this is a test") distanceTo Bytes.of("wokka wokka!!!")
+
+        actual shouldBeEqual expected
+    }
 }

@@ -41,12 +41,15 @@ data class Bytes(val content: ByteArray) {
         Base64.getEncoder().encode(content)
     )
 
-    fun toHex() = Bytes(
-        content.joinToString("")
-            .chunked(2)
-            .map { it.toByte() }
-            .toByteArray()
-    )
+    infix fun distanceTo(other: Bytes): Int = content.zip(other.content).sumOf {
+        it.first.toInt().xor(it.second.toInt()).countOneBits()
+    }
+
+    fun chunked(size: Int) = content
+        .asList()
+        .chunked(size)
+        .map { it.toByteArray() }
+        .map { Bytes(it) }
 
     override fun toString(): String {
         return content
@@ -76,6 +79,14 @@ data class Bytes(val content: ByteArray) {
         )
 
         fun fromHexMultiline(encoded: String) = fromHex(
+            encoded.replace("\n", "")
+        )
+
+        fun fromBase64(encoded: String) = Bytes(
+            Base64.getDecoder().decode(encoded)
+        )
+
+        fun fromBase64Multiline(encoded: String) = fromBase64(
             encoded.replace("\n", "")
         )
 
