@@ -106,8 +106,3 @@ object Analysis {
         }
     }
 }
-
-data class ScoredByteKey(val key: Byte, val score: Double)
-data class ScoredRepeatedKey(val key: Bytes, val score: Double)
-data class ScoredKeyLength(val keySize: Int, val score: Double)
-data class ScoredPlaintext(val plaintext: Bytes, val score: Double)

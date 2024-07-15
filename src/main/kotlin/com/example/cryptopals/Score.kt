@@ -54,3 +54,8 @@ object Score {
 private fun Char.isPrintable() = code in 32..126
 private fun Char.isNewLine() = code == 10 || code == 13
 private fun Char.isPrintableSymbol() = isPrintable() && !isLetterOrDigit() && !isWhitespace()
+
+data class ScoredByteKey(val key: Byte, val score: Double)
+data class ScoredRepeatedKey(val key: Bytes, val score: Double)
+data class ScoredKeyLength(val keySize: Int, val score: Double)
+data class ScoredPlaintext(val plaintext: Bytes, val score: Double)
